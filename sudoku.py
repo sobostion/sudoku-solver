@@ -18,7 +18,7 @@ rows[9] = [None,None,None,6,None,9,4,1,2]
 # finding solutions
 # need a way of getting blocks
 
-def makeBlock(first_row,second_row,third_row):
+def getBlocks():
     
     # initialise blocks dictionary
     blocks = {}
@@ -33,4 +33,4 @@ def makeBlock(first_row,second_row,third_row):
             blocks[j+3].extend( [ rows[7][i+j], rows[8][i+j], rows[9][i+j] ] )
     return blocks
 
-print makeBlock(rows[1], rows[2], rows[3])
+print getBlocks()
