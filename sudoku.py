@@ -27,7 +27,10 @@ def makeBlock(first_row,second_row,third_row):
 
     # create blocks
     for i in range(0,3):
-            blocks[1].extend( [ rows[1][i], rows[2][i], rows[3][i] ] )
+        for j in range(0,9,3):
+            blocks[j+1].extend( [ rows[1][i+j], rows[2][i+j], rows[3][i+j] ] )
+            blocks[j+2].extend( [ rows[4][i+j], rows[5][i+j], rows[6][i+j] ] )
+            blocks[j+3].extend( [ rows[7][i+j], rows[8][i+j], rows[9][i+j] ] )
     return blocks
 
 print makeBlock(rows[1], rows[2], rows[3])
