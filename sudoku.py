@@ -20,19 +20,14 @@ rows[9] = [None,None,None,6,None,9,4,1,2]
 
 def makeBlock(first_row,second_row,third_row):
     
-    blockList1 = []
-    blockList2 = []
-    blockList3 = []
-    for i in range(0,3):
-        blockList1.extend([first_row[i], second_row[i], third_row[i]])
-    for i in range(3,6):
-        blockList2.extend([first_row[i], second_row[i], third_row[i]])
-    for i in range(6,9):
-        blockList3.extend([first_row[i], second_row[i], third_row[i]])
-    return blockList1, blockList2, blockList3
-        
+    # initialise blocks dictionary
+    blocks = {}
+    for i in range(1,10):
+        blocks[i] = []
 
-blocks1 = makeBlock(rows[1], rows[2], rows[3])
-blocks2 = makeBlock(rows[4], rows[5], rows[6])
-blocks3 = makeBlock(rows[7], rows[8], rows[9]) 
-print blocks1, blocks2, blocks3
+    # create blocks
+    for i in range(0,3):
+            blocks[1].extend( [ rows[1][i], rows[2][i], rows[3][i] ] )
+    return blocks
+
+print makeBlock(rows[1], rows[2], rows[3])
