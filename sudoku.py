@@ -28,5 +28,7 @@ def makeBlock(first_row,second_row,third_row):
     return blockList1, blockList2, blockList3
         
 
-block1 = makeBlock(row1, row2, row3)
-print block1
+blocks1 = makeBlock(row1, row2, row3)
+blocks2 = makeBlock(row4, row5, row6)
+blocks3 = makeBlock(row7, row8, row9) 
+print blocks1, blocks2, blocks3
