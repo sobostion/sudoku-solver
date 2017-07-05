@@ -45,4 +45,19 @@ for item in rows[0]:
         absent_index.append(count)
     count+=1
 print absent_index
- 
+
+def solve(row):
+    
+    for number in range(1,10):
+        if number not in row:
+            absent.append(number)
+    # check each missing number's block for numbers in absent
+    for missingIndex in absent_index:
+        # find which block the number is in
+        if missingIndex < 3:
+            print "block 1"
+        elif missingIndex < 6:
+            print "block 2"
+        elif missingIndex < 9:
+            print "block 3"
+solve(rows[0])
