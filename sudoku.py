@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # sudoku solver
 
 # initialise sudoku puzzle
@@ -33,31 +34,43 @@ def getBlocks():
             blocks[j+2].extend( [ rows[6][i+j], rows[7][i+j], rows[8][i+j] ] )
     return blocks
 
-print getBlocks()
+blocks = getBlocks()
 
 # now for actually solving the puzzle
-absent = []
+absent_nums = []
 absent_index = []
+possible_nums = []
 count = 0
 #check which numbers we need to find in a row
 for item in rows[0]:
     if item == None:
         absent_index.append(count)
     count+=1
-print absent_index
 
 def solve(row):
     
+    # find absent numbers in row
     for number in range(1,10):
         if number not in row:
-            absent.append(number)
+            absent_nums.append(number)
     # check each missing number's block for numbers in absent
     for missingIndex in absent_index:
         # find which block the number is in
         if missingIndex < 3:
-            print "block 1"
+            # block 0
+            print "block 0"
         elif missingIndex < 6:
-            print "block 2"
+            # block 3
+            # does block contain any absent numbers? if so, remove as possibility
+            possible_nums = [ x for x in absent_nums if x not in blocks[3] ]
+            
         elif missingIndex < 9:
-            print "block 3"
+            # block 6
+            print "block 6"
 solve(rows[0])
+
+test_list1 = [1,2,3,4,5]
+test_list2 = [1,2,3]
+
+test_list3 = [x for x in test_list1 if x not in test_list2]
+print test_list3
