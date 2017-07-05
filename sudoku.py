@@ -34,3 +34,14 @@ def getBlocks():
     return blocks
 
 print getBlocks()
+
+# now for actually solving the puzzle
+absent = []
+absent_index = []
+count = 0
+#check which numbers we need to find in a row
+for item in rows[1]:
+    count+=1
+    if item == None:
+        absent_index.append(count)
+ 
