@@ -61,16 +61,12 @@ def solve(row):
             print "block 0"
         elif missingIndex < 6:
             # block 3
+            print "block 3"
             # does block contain any absent numbers? if so, remove as possibility
-            possible_nums = [ x for x in absent_nums if x not in blocks[3] ]
-            
+            possible_nums = [ x for x in absent_nums if x not in blocks[3] ]            
+
         elif missingIndex < 9:
             # block 6
             print "block 6"
 solve(rows[0])
 
-test_list1 = [1,2,3,4,5]
-test_list2 = [1,2,3]
-
-test_list3 = [x for x in test_list1 if x not in test_list2]
-print test_list3
