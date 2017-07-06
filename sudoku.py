@@ -37,10 +37,6 @@ def getBlocks():
 blocks = getBlocks()
 
 # now for actually solving the puzzle
-absent_nums = []
-absent_index = []
-possible_nums = {}
-count = 0
 #check which numbers we need to find in a row
 def findMissingRowIndexes(row_num):
     absent_index = []
@@ -51,28 +47,48 @@ def findMissingRowIndexes(row_num):
         count+=1
     return absent_index
 
-absent_index = findMissingRowIndexes(0)
 
-def solve(row):
-    
+def possibleNumsRow(row_num):
+    absent_nums = []
+    possible_nums = {}
     # find absent numbers in row
     for number in range(1,10):
-        if number not in row:
+        if number not in rows[row_num]:
             absent_nums.append(number)
+    # get indexes of absent numbers
+    absent_index = findMissingRowIndexes(row_num) 
     # check each missing number's block for numbers in absent
     for missingIndex in absent_index:
-        # find which block the number is in
-        if missingIndex < 3:
-            print "block 0"
-        elif missingIndex < 6:
-            print "block 3"
-            # does block contain any absent numbers? if so, remove as possibility
-            possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[3] ]            
+    # find which block the number is in
+        if row_num < 3:
+        # first three blocks
+            if missingIndex < 3:
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[0] ]
+            elif missingIndex < 6:
+                # does block contain any absent numbers? if so, remove as possibility
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[3] ]            
+            elif missingIndex < 9:
+                # block 6
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[6] ]
+        elif row_num < 6:
+        # second row of blocks
+            if missingIndex < 3:
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[1] ]
+            elif missingIndex < 6:
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[4] ]
+            elif missingIndex < 9:
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[7] ]
+        
+        elif row_num < 9:
+        # third row of blocks
+            if missingIndex < 3:
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[2] ]
+            elif missingIndex < 6:
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[5] ]
+            elif missingIndex < 9:
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[8] ]
 
-        elif missingIndex < 9:
-            # block 6
-            print "block 6"
-            possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[6] ]
-    print possible_nums
-solve(rows[0])
+    return possible_nums
 
+for i in range(0,9):
+    print possibleNumsRow(i)
