@@ -39,13 +39,19 @@ blocks = getBlocks()
 # now for actually solving the puzzle
 absent_nums = []
 absent_index = []
-possible_nums = []
+possible_nums = {}
 count = 0
 #check which numbers we need to find in a row
-for item in rows[0]:
-    if item == None:
-        absent_index.append(count)
-    count+=1
+def findMissingRowIndexes(row_num):
+    absent_index = []
+    count = 0
+    for item in rows[row_num]:
+        if item == None:
+            absent_index.append(count)
+        count+=1
+    return absent_index
+
+absent_index = findMissingRowIndexes(0)
 
 def solve(row):
     
@@ -57,16 +63,16 @@ def solve(row):
     for missingIndex in absent_index:
         # find which block the number is in
         if missingIndex < 3:
-            # block 0
             print "block 0"
         elif missingIndex < 6:
-            # block 3
             print "block 3"
             # does block contain any absent numbers? if so, remove as possibility
-            possible_nums = [ x for x in absent_nums if x not in blocks[3] ]            
+            possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[3] ]            
 
         elif missingIndex < 9:
             # block 6
             print "block 6"
+            possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[6] ]
+    print possible_nums
 solve(rows[0])
 
