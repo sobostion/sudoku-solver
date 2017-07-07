@@ -31,8 +31,6 @@ def getColumns():
     return columns
 
 columns = getColumns()
-print columns
-
 
 # need a way of getting blocks
 def getBlocks():
@@ -103,8 +101,17 @@ def possibleNumsRow(row_num):
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[5] ]
             elif missingIndex < 9:
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[8] ]
-
+    # at this point we have possible numbers when taking into account rows and blocks
+    # now we need to take columns into account
+    # each key of the possible_nums dictionary is a column nunber
+    # we can remove any values that already exist in that column
+    
+    for column, possibles in possible_nums.items():
+        # if columns[column] shares values with possibles, remove those values from possibles
+        for number in possibles:
+            if number in columns[column]:
+                possibles.remove(number)
+    
     return possible_nums
 
-for i in range(0,9):
-    print i, possibleNumsRow(i)
+print possibleNumsRow(0)
