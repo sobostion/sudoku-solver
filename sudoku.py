@@ -116,10 +116,28 @@ def possibleNumsRow(row_num):
 
 def enterAnswer():
     
-    for i in range(0,9):
-        for column, possibles in possibleNumsRow(i).items():
+    # enter values into rows
+    for row in range(0,9):
+        for column, possibles in possibleNumsRow(row).items():
             if len(possibles) == 1:
-                print i, column
+                 rows[row][column] = possibles[0]
+    # reset blocks with new rows
+    blocks = getBlocks()
+    # if block has 1 missing value, fill it in
+    for block in range(0,9):
+        if blocks[block].count(None) == 1:
+            # find missing number
+            absent_num = [ x for x in range(1,10) if x not in blocks[block] ]
+            # replace None with absent_num[0]
+            blocks[block] = [ absent_num[0] if x is None else x for x in blocks[block] ]
     return 0
 
-enterAnswer()
+for i in range(0,10):
+    try:
+        for key, value in rows.items():
+            print key, value
+
+        enterAnswer()
+        print " "
+    except:
+        break
