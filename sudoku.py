@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # sudoku solver
-
+from prettytable import PrettyTable
 # initialise sudoku puzzle
 # let's convert this to a dictionary of lists
 
@@ -20,11 +20,9 @@ rows[8] = [None,None,None,6,None,9,4,1,2]
 # need a way of getting columns
 
 def getColumns():
-    
     columns = {}
     for k in range(0,9):
         columns[k] = []
-    
     for i in range(0,9):
         for j in range(0,9):
             columns[i].append(rows[j][i])
@@ -132,12 +130,13 @@ def enterAnswer():
             blocks[block] = [ absent_num[0] if x is None else x for x in blocks[block] ]
     return 0
 
-for i in range(0,10):
-    try:
-        for key, value in rows.items():
-            print key, value
 
-        enterAnswer()
-        print " "
-    except:
-        break
+def prettyPrint():
+    table = PrettyTable()
+    table.add_column(" ", range(0,9))
+    for i in [str(x) for x in range(0,9)]:
+        table.add_column(i, columns[int(i)])
+    return table
+
+
+print prettyPrint()
