@@ -16,9 +16,25 @@ rows[6] = [None,None,2,None,7,3,None,None,None]
 rows[7] = [9,1,6,5,4,None,3,None,7]
 rows[8] = [None,None,None,6,None,9,4,1,2]
 
-# finding solutions
-# need a way of getting blocks
 
+# need a way of getting columns
+
+def getColumns():
+    
+    columns = {}
+    for k in range(0,9):
+        columns[k] = []
+    
+    for i in range(0,9):
+        for j in range(0,9):
+            columns[i].append(rows[j][i])
+    return columns
+
+columns = getColumns()
+print columns
+
+
+# need a way of getting blocks
 def getBlocks():
     
     # initialise blocks dictionary
@@ -91,4 +107,4 @@ def possibleNumsRow(row_num):
     return possible_nums
 
 for i in range(0,9):
-    print possibleNumsRow(i)
+    print i, possibleNumsRow(i)
