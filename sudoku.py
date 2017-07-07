@@ -114,4 +114,12 @@ def possibleNumsRow(row_num):
     
     return possible_nums
 
-print possibleNumsRow(0)
+def enterAnswer():
+    
+    for i in range(0,9):
+        for column, possibles in possibleNumsRow(i).items():
+            if len(possibles) == 1:
+                print i, column
+    return 0
+
+enterAnswer()
