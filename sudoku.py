@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # sudoku solver
-from prettytable import PrettyTable
+from prettytable import *
 # initialise sudoku puzzle
 # let's convert this to a dictionary of lists
 
@@ -39,11 +39,16 @@ def getBlocks():
         blocks[i] = []
 
     # create blocks
-    for i in range(0,3):
-        for j in range(0,9,3):
-            blocks[j+0].extend( [ rows[0][i+j], rows[1][i+j], rows[2][i+j] ] )
-            blocks[j+1].extend( [ rows[3][i+j], rows[4][i+j], rows[5][i+j] ] )
-            blocks[j+2].extend( [ rows[6][i+j], rows[7][i+j], rows[8][i+j] ] )
+    #for i in range(0,3):
+        #for j in range(0,9,3):
+            #blocks[j+0].extend( [ rows[0][i+j], rows[1][i+j], rows[2][i+j] ] )
+            #blocks[j+1].extend( [ rows[3][i+j], rows[4][i+j], rows[5][i+j] ] )
+            #blocks[j+2].extend( [ rows[6][i+j], rows[7][i+j], rows[8][i+j] ] )
+    for k in [0,3,6]:
+        j = 0
+        for i in [0,3,6]:
+            blocks[k+j] += rows[k][i:i+3] + rows[k+1][i:i+3] + rows[k+2][i:i+3]
+            j = j+1
     return blocks
 
 blocks = getBlocks()
@@ -78,32 +83,32 @@ def possibleNumsRow(row_num):
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[0] ]
             elif missingIndex < 6:
                 # does block contain any absent numbers? if so, remove as possibility
-                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[3] ]            
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[1] ]            
             elif missingIndex < 9:
                 # block 6
-                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[6] ]
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[2] ]
         elif row_num < 6:
         # second row of blocks
             if missingIndex < 3:
-                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[1] ]
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[3] ]
             elif missingIndex < 6:
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[4] ]
             elif missingIndex < 9:
-                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[7] ]
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[5] ]
         
         elif row_num < 9:
         # third row of blocks
             if missingIndex < 3:
-                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[2] ]
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[6] ]
             elif missingIndex < 6:
-                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[5] ]
+                possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[7] ]
             elif missingIndex < 9:
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[8] ]
     # at this point we have possible numbers when taking into account rows and blocks
     # now we need to take columns into account
     # each key of the possible_nums dictionary is a column nunber
     # we can remove any values that already exist in that column
-    
+    columns = getColumns()  # reset columns for when function is used again
     for column, possibles in possible_nums.items():
         # if columns[column] shares values with possibles, remove those values from possibles
         for number in possibles:
@@ -112,8 +117,22 @@ def possibleNumsRow(row_num):
     
     return possible_nums
 
+
+
+def blockIndex2Row(block, index):
+    row_num = 0 # reset
+    for i in [0,3,6]:
+        if block in [i, i+1, i+2]:
+            for j in [0,3,6]:
+                if index in [j,j+1,j+2]:
+                    return row_num  # we have found the row
+                else:
+                    row_num+=1  # not this row, try next row
+        else:
+            row_num+=3
+
+
 def enterAnswer():
-    
     # enter values into rows
     for row in range(0,9):
         for column, possibles in possibleNumsRow(row).items():
@@ -122,21 +141,73 @@ def enterAnswer():
     # reset blocks with new rows
     blocks = getBlocks()
     # if block has 1 missing value, fill it in
+#    for block in range(0,9):
+#        if blocks[block].count(None) == 1:
+            # find missing number
+#            absent_num = [ x for x in range(1,10) if x not in blocks[block] ]
+            # replace None with absent_num[0]
+#            blocks[block] = [ absent_num[0] if x is None else x for x in blocks[block] ]
+#            print "absent_num was: ", absent_num[0]
+#            print "None count: ", blocks[block].count(None)
     for block in range(0,9):
         if blocks[block].count(None) == 1:
-            # find missing number
+            index = blocks[block].index(None)
             absent_num = [ x for x in range(1,10) if x not in blocks[block] ]
-            # replace None with absent_num[0]
-            blocks[block] = [ absent_num[0] if x is None else x for x in blocks[block] ]
+            #blocks[block] = [ absent_num[0] if x is None else x for x in blocks[block] ]
+            # at this point the block has been filled, but we still need to update the value in rows
+            # otherwise getBlocks() will reset to the original blocks
+            # we know the index of the None and can translate this to row/column
+            
+            row_num = blockIndex2Row(block, index)
+
+            # let's update the row with the new value
+            # there could be multiple None values per row, so we must be careful
+            # we have to make sure the None is the one inside this block when we replace it
+            
+            # let's get the indexes of all the None values
+            none_index = [ i for i,j in enumerate(rows[row_num]) if j == None ]
+            print "block index: ", index
+            print "row num: ", row_num
+            print "row: ", rows[row_num]
+            print "block num: ", block
+            print "block: ", blocks[block]            
+            print "none before: ",  none_index
+            
+            if block in [0,3,6]:
+                none_index = [ x for x in none_index if x < 3 ]
+            if block in [1,4,7]:
+                none_index = [ x for x in none_index if x > 2 and x < 6 ]
+            if block in [2,5,8]:
+                none_index = [ x for x in none_index if x > 5 and x < 9 ]
+            print "none after: ", none_index
+            
+            print "row before:"
+            print rows[row_num]
+            print "row after:"
+            rows[row_num][none_index[0]] = absent_num[0]
+            print rows[row_num]
+                
     return 0
 
 
 def prettyPrint():
+    columns = getColumns()
     table = PrettyTable()
+    table.hrules = ALL
     table.add_column(" ", range(0,9))
     for i in [str(x) for x in range(0,9)]:
         table.add_column(i, columns[int(i)])
     return table
 
+def results():
 
-print prettyPrint()
+    print "ORIGINAL"
+    print prettyPrint()
+
+    for i in range(0,10):
+        enterAnswer()
+
+    print "FINAL"
+    print prettyPrint()
+
+enterAnswer()
