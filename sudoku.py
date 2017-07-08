@@ -32,18 +32,11 @@ columns = getColumns()
 
 # need a way of getting blocks
 def getBlocks():
-    
     # initialise blocks dictionary
     blocks = {}
     for i in range(0,9):
         blocks[i] = []
-
-    # create blocks
-    #for i in range(0,3):
-        #for j in range(0,9,3):
-            #blocks[j+0].extend( [ rows[0][i+j], rows[1][i+j], rows[2][i+j] ] )
-            #blocks[j+1].extend( [ rows[3][i+j], rows[4][i+j], rows[5][i+j] ] )
-            #blocks[j+2].extend( [ rows[6][i+j], rows[7][i+j], rows[8][i+j] ] )
+    
     for k in [0,3,6]:
         j = 0
         for i in [0,3,6]:
@@ -141,37 +134,20 @@ def enterAnswer():
     # reset blocks with new rows
     blocks = getBlocks()
     # if block has 1 missing value, fill it in
-#    for block in range(0,9):
-#        if blocks[block].count(None) == 1:
-            # find missing number
-#            absent_num = [ x for x in range(1,10) if x not in blocks[block] ]
-            # replace None with absent_num[0]
-#            blocks[block] = [ absent_num[0] if x is None else x for x in blocks[block] ]
-#            print "absent_num was: ", absent_num[0]
-#            print "None count: ", blocks[block].count(None)
     for block in range(0,9):
         if blocks[block].count(None) == 1:
             index = blocks[block].index(None)
             absent_num = [ x for x in range(1,10) if x not in blocks[block] ]
-            #blocks[block] = [ absent_num[0] if x is None else x for x in blocks[block] ]
             # at this point the block has been filled, but we still need to update the value in rows
             # otherwise getBlocks() will reset to the original blocks
             # we know the index of the None and can translate this to row/column
-            
             row_num = blockIndex2Row(block, index)
-
             # let's update the row with the new value
             # there could be multiple None values per row, so we must be careful
             # we have to make sure the None is the one inside this block when we replace it
             
             # let's get the indexes of all the None values
             none_index = [ i for i,j in enumerate(rows[row_num]) if j == None ]
-            print "block index: ", index
-            print "row num: ", row_num
-            print "row: ", rows[row_num]
-            print "block num: ", block
-            print "block: ", blocks[block]            
-            print "none before: ",  none_index
             
             if block in [0,3,6]:
                 none_index = [ x for x in none_index if x < 3 ]
@@ -179,13 +155,8 @@ def enterAnswer():
                 none_index = [ x for x in none_index if x > 2 and x < 6 ]
             if block in [2,5,8]:
                 none_index = [ x for x in none_index if x > 5 and x < 9 ]
-            print "none after: ", none_index
             
-            print "row before:"
-            print rows[row_num]
-            print "row after:"
             rows[row_num][none_index[0]] = absent_num[0]
-            print rows[row_num]
                 
     return 0
 
@@ -201,13 +172,13 @@ def prettyPrint():
 
 def results():
 
-    print "ORIGINAL"
-    print prettyPrint()
+#    print "ORIGINAL"
+#    print prettyPrint()
 
-    for i in range(0,10):
+    for i in range(0,20):
         enterAnswer()
 
     print "FINAL"
     print prettyPrint()
 
-enterAnswer()
+results()
