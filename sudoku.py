@@ -2,10 +2,6 @@
 # sudoku solver
 from prettytable import *
 # initialise sudoku puzzle
-# let's convert this to a dictionary of lists
-
-#   B R O K E N:
-#       doesn't remove 9 as possibility from row 0 col 7
 rows = {}
 
 rows[0] = [2,5,3,4,None,6,None,None,None]
@@ -18,9 +14,7 @@ rows[6] = [None,None,2,None,7,3,None,None,None]
 rows[7] = [9,1,6,5,4,None,3,None,7]
 rows[8] = [None,None,None,6,None,9,4,1,2]
 
-
 # need a way of getting columns
-
 def getColumns():
     columns = {}
     for k in range(0,9):
@@ -105,16 +99,6 @@ def possibleNumsRow(row_num):
         print "possibles before: ", possibles
         possible_nums[column] = [ x for x in possibles if x not in columns[column] ]
         print "possibles after: ", possibles
-        # if columns[column] shares values with possibles, remove those values from possibles
-#        for number in possibles:
-#            print "possible number is ", number
-#            if number in columns[column]:
-#                print "possibles before: ", possibles
-#                possibles.remove(number)
-#                print "possibles after: ", possibles
-#                print "column: ", columns[column]
-#                print "number removed: ", number
-    
     return possible_nums
 
 
@@ -186,7 +170,6 @@ def noneCount():
                 count += 1
     return count
         
-
 
 
 def prettyPrint():
