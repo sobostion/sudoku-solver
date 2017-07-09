@@ -5,11 +5,7 @@ from prettytable import *
 # let's convert this to a dictionary of lists
 
 #   B R O K E N:
-#       The possibleNumsRow() function does not work!
-#       It will fill in incorrect values because it
-#       is comparing a block to values outside of its block
-
-
+#       doesn't remove 9 as possibility from row 0 col 7
 rows = {}
 
 rows[0] = [2,5,3,4,None,6,None,None,None]
@@ -63,7 +59,6 @@ def findMissingRowIndexes(row_num):
         count+=1
     return absent_index
 
-
 def possibleNumsRow(row_num):
     absent_nums = []
     possible_nums = {}
@@ -106,10 +101,19 @@ def possibleNumsRow(row_num):
     # we can remove any values that already exist in that column
     columns = getColumns()  # reset columns for when function is used again
     for column, possibles in possible_nums.items():
+        print "column", column, columns[column]
+        print "possibles before: ", possibles
+        possible_nums[column] = [ x for x in possibles if x not in columns[column] ]
+        print "possibles after: ", possibles
         # if columns[column] shares values with possibles, remove those values from possibles
-        for number in possibles:
-            if number in columns[column]:
-                possibles.remove(number)
+#        for number in possibles:
+#            print "possible number is ", number
+#            if number in columns[column]:
+#                print "possibles before: ", possibles
+#                possibles.remove(number)
+#                print "possibles after: ", possibles
+#                print "column: ", columns[column]
+#                print "number removed: ", number
     
     return possible_nums
 
@@ -130,10 +134,19 @@ def blockIndex2Row(block, index):
 
 def enterAnswer():
     # enter values into rows
+    # if only 1 possible in row, fill in
     for row in range(0,9):
         for column, possibles in possibleNumsRow(row).items():
             if len(possibles) == 1:
                  rows[row][column] = possibles[0]
+    # fill in columns with only one left
+    columns = getColumns()
+    for column in range(0,9):
+        if columns[column].count(None) == 1:
+            index = columns[column].index(None) # also the row number
+            absent_num = [ x for x in range(1,10) if x not in columns[column] ]
+            rows[index][column] = absent_num[0]
+            
     # reset blocks with new rows
     blocks = getBlocks()
     # if block has 1 missing value, fill it in
@@ -195,15 +208,9 @@ def results():
         rows_before = noneCount()
         enterAnswer()
         rows_after = noneCount()
-        print "before: ", rows_before
-        print "after: ", rows_after
     print "FINAL"
     print prettyPrint()
-    for i in range(0,9):
-        print i, possibleNumsRow(i)
-    print "COLUMNS"
-    for column, values in columns.items():
-        print column, values
 
 results()
-
+for i in range(0,9):
+        print i, possibleNumsRow(i)
