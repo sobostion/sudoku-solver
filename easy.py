@@ -95,10 +95,7 @@ def possibleNumsRow(row_num):
     # we can remove any values that already exist in that column
     columns = getColumns()  # reset columns for when function is used again
     for column, possibles in possible_nums.items():
-        print "column", column, columns[column]
-        print "possibles before: ", possibles
         possible_nums[column] = [ x for x in possibles if x not in columns[column] ]
-        print "possibles after: ", possibles
     return possible_nums
 
 
