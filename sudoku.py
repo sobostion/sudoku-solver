@@ -4,6 +4,12 @@ from prettytable import *
 # initialise sudoku puzzle
 # let's convert this to a dictionary of lists
 
+#   B R O K E N:
+#       The possibleNumsRow() function does not work!
+#       It will fill in incorrect values because it
+#       is comparing a block to values outside of its block
+
+
 rows = {}
 
 rows[0] = [2,5,3,4,None,6,None,None,None]
@@ -66,8 +72,8 @@ def possibleNumsRow(row_num):
         if number not in rows[row_num]:
             absent_nums.append(number)
     # get indexes of absent numbers
-    absent_index = findMissingRowIndexes(row_num) 
-    # check each missing number's block for numbers in absent
+    absent_index = findMissingRowIndexes(row_num)
+    blocks = getBlocks()    # reset blocks
     for missingIndex in absent_index:
     # find which block the number is in
         if row_num < 3:
@@ -75,10 +81,8 @@ def possibleNumsRow(row_num):
             if missingIndex < 3:
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[0] ]
             elif missingIndex < 6:
-                # does block contain any absent numbers? if so, remove as possibility
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[1] ]            
             elif missingIndex < 9:
-                # block 6
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[2] ]
         elif row_num < 6:
         # second row of blocks
@@ -88,7 +92,6 @@ def possibleNumsRow(row_num):
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[4] ]
             elif missingIndex < 9:
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[5] ]
-        
         elif row_num < 9:
         # third row of blocks
             if missingIndex < 3:
@@ -97,7 +100,7 @@ def possibleNumsRow(row_num):
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[7] ]
             elif missingIndex < 9:
                 possible_nums[missingIndex] = [ x for x in absent_nums if x not in blocks[8] ]
-    # at this point we have possible numbers when taking into account rows and blocks
+    # at this point we have possible numbers when taking into account  blocks
     # now we need to take columns into account
     # each key of the possible_nums dictionary is a column nunber
     # we can remove any values that already exist in that column
@@ -161,6 +164,18 @@ def enterAnswer():
     return 0
 
 
+def noneCount():
+    # counts how many empty squares are left
+    count = 0
+    for i in range(0,9):
+        for item in rows[i]:
+            if item == None:
+                count += 1
+    return count
+        
+
+
+
 def prettyPrint():
     columns = getColumns()
     table = PrettyTable()
@@ -174,11 +189,21 @@ def results():
 
 #    print "ORIGINAL"
 #    print prettyPrint()
-
-    for i in range(0,20):
+    rows_before = 0 # initialise with different values,
+    rows_after = 1 # doesn't matter what they are
+    while(rows_before != rows_after):
+        rows_before = noneCount()
         enterAnswer()
-
+        rows_after = noneCount()
+        print "before: ", rows_before
+        print "after: ", rows_after
     print "FINAL"
     print prettyPrint()
+    for i in range(0,9):
+        print i, possibleNumsRow(i)
+    print "COLUMNS"
+    for column, values in columns.items():
+        print column, values
 
 results()
+
